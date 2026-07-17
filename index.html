@@ -1,83 +1,331 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>大乐透模拟选号</title>
 
-    <style>
+<meta charset="UTF-8">
 
-        body {
-            text-align: center;
-            font-family: Arial;
-            margin-top: 100px;
-        }
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        h1 {
-            font-size: 40px;
-        }
+<title>彩票模拟器</title>
 
-        .number {
-            font-size: 30px;
-            margin: 20px;
-        }
 
-        .front {
-            color: red;
-        }
+<style>
 
-        .back {
-            color: blue;
-        }
 
-        button {
-            font-size: 25px;
-            padding: 10px 30px;
-            cursor: pointer;
-        }
+*{
+    box-sizing:border-box;
+}
 
-    </style>
+
+body{
+
+    margin:30px 0;
+
+    text-align:center;
+
+    font-family:Arial;
+
+    background:#f5f5f5;
+
+}
+
+
+h1{
+
+    font-size:36px;
+
+}
+
+
+
+select{
+
+    font-size:20px;
+
+    padding:8px;
+
+}
+
+
+
+button{
+
+    margin-top:30px;
+
+    padding:12px 40px;
+
+    font-size:22px;
+
+}
+
+
+
+
+/* 总容器 */
+
+#result{
+
+    margin-top:40px;
+
+}
+
+
+
+
+.row{
+
+
+    display:flex;
+
+
+    justify-content:center;
+
+
+    align-items:center;
+
+
+    flex-wrap:nowrap;
+
+
+}
+
+
+
+
+.ball{
+
+
+    width:58px;
+
+
+    height:58px;
+
+
+    margin:5px;
+
+
+    border-radius:50%;
+
+
+    display:flex;
+
+
+    justify-content:center;
+
+
+    align-items:center;
+
+
+    color:white;
+
+
+    font-weight:bold;
+
+
+    font-size:22px;
+
+
+}
+
+
+
+.red{
+
+    background:#e74c3c;
+
+}
+
+
+
+.blue{
+
+    background:#3498db;
+
+}
+
+
+
+.green{
+
+    background:#27ae60;
+
+}
+
+
+
+/* 快乐8专用 */
+
+.k8-container{
+
+
+    width:100%;
+
+
+    display:flex;
+
+
+    flex-direction:column;
+
+
+    justify-content:center;
+
+
+    align-items:center;
+
+
+}
+
+
+
+.k8-row{
+
+
+    display:flex;
+
+
+    justify-content:center;
+
+
+    align-items:center;
+
+
+}
+
+
+
+
+
+@media(max-width:600px){
+
+
+
+h1{
+
+    font-size:28px;
+
+}
+
+
+
+.ball{
+
+
+    width:38px;
+
+
+    height:38px;
+
+
+    margin:3px;
+
+
+    font-size:15px;
+
+
+}
+
+
+
+select{
+
+    font-size:16px;
+
+}
+
+
+
+button{
+
+    font-size:18px;
+
+}
+
+
+
+}
+
+
+
+</style>
+
 
 </head>
 
 
 <body>
 
-<h1>大乐透模拟选号</h1>
+
+<h1>
+彩票模拟器
+</h1>
 
 
-<div class="number front">
-    前区：
-    <span id="front">-- -- -- -- --</span>
-</div>
+
+<select id="type">
 
 
-<div class="number back">
-    后区：
-    <span id="back">-- --</span>
-</div>
+<option value="dlt">
+大乐透
+</option>
 
 
-<button onclick="start()">开始摇号</button>
+<option value="3d">
+3D
+</option>
+
+
+<option value="k8">
+快乐8
+</option>
+
+
+<option value="qxc">
+七星彩
+</option>
+
+
+</select>
+
+
+<div id="result"></div>
+
+
+<button onclick="start()">
+开始摇号
+</button>
+
+
 
 
 <script>
 
 
-function createNumber(max, count) {
-
-    let arr = [];
+let timer;
 
 
-    while(arr.length < count) {
 
-        let num = Math.floor(Math.random() * max) + 1;
+// 不重复号码
+
+function randomNo(max,count){
 
 
-        if(!arr.includes(num)) {
+    let arr=[];
+
+
+    while(arr.length<count){
+
+
+        let num=Math.floor(Math.random()*max)+1;
+
+
+        if(!arr.includes(num)){
+
 
             arr.push(num);
 
         }
+
 
     }
 
@@ -91,25 +339,375 @@ function createNumber(max, count) {
 
 
 
+
+//3D
+
+function create3D(){
+
+
+    return [
+
+        Math.floor(Math.random()*10),
+
+        Math.floor(Math.random()*10),
+
+        Math.floor(Math.random()*10)
+
+    ];
+
+
+}
+
+
+
+
+//七星彩
+
+function createQXC(){
+
+
+    let arr=[];
+
+
+    for(let i=0;i<6;i++){
+
+
+        arr.push(
+            Math.floor(Math.random()*10)
+        );
+
+
+    }
+
+
+
+    arr.push(
+        Math.floor(Math.random()*15)
+    );
+
+
+    return arr;
+
+}
+
+
+
+
+function createLottery(){
+
+
+    let type=document.getElementById("type").value;
+
+
+
+
+    if(type==="dlt"){
+
+
+        return {
+
+
+            nums:[
+
+                ...randomNo(35,5),
+
+                ...randomNo(12,2)
+
+            ],
+
+
+            colors:[
+
+                "red",
+
+                "red",
+
+                "red",
+
+                "red",
+
+                "red",
+
+                "blue",
+
+                "blue"
+
+            ]
+
+        };
+
+    }
+
+
+
+
+
+    if(type==="3d"){
+
+
+        return {
+
+
+            nums:create3D(),
+
+
+            colors:[
+
+                "red",
+
+                "red",
+
+                "red"
+
+            ]
+
+
+        };
+
+
+    }
+
+
+
+
+
+    if(type==="k8"){
+
+
+        return {
+
+
+            nums:randomNo(80,20),
+
+
+            colors:Array(20).fill("red")
+
+
+        };
+
+
+    }
+
+
+
+
+    if(type==="qxc"){
+
+
+        return {
+
+
+            nums:createQXC(),
+
+
+            colors:[
+
+                "red",
+
+                "red",
+
+                "red",
+
+                "red",
+
+                "red",
+
+                "red",
+
+                "green"
+
+            ]
+
+
+        };
+
+
+    }
+
+
+
+}
+
+
+
+
+
+
+
+function createBall(num,color,type){
+
+
+    let ball=document.createElement("div");
+
+
+    ball.className="ball "+color;
+
+
+
+    if(type==="dlt" || type==="k8"){
+
+
+        ball.innerHTML=
+        num.toString().padStart(2,"0");
+
+
+    }
+    else{
+
+
+        ball.innerHTML=num;
+
+
+    }
+
+
+
+    return ball;
+
+
+}
+
+
+
+
+
+function show(data){
+
+
+    let box=document.getElementById("result");
+
+
+    box.innerHTML="";
+
+
+
+    let type=document.getElementById("type").value;
+
+
+
+    //快乐8特殊处理
+
+    if(type==="k8"){
+
+
+        let container=document.createElement("div");
+
+
+        container.className="k8-container";
+
+
+
+        for(let i=0;i<2;i++){
+
+
+            let row=document.createElement("div");
+
+
+            row.className="k8-row";
+
+
+
+            for(let j=0;j<10;j++){
+
+
+                let index=i*10+j;
+
+
+                row.appendChild(
+
+                    createBall(
+
+                        data.nums[index],
+
+                        "red",
+
+                        type
+
+                    )
+
+                );
+
+
+            }
+
+
+            container.appendChild(row);
+
+
+        }
+
+
+
+        box.appendChild(container);
+
+
+        return;
+
+
+    }
+
+
+
+
+
+
+    //其他全部一排
+
+    let row=document.createElement("div");
+
+
+    row.className="row";
+
+
+
+    data.nums.forEach((num,index)=>{
+
+
+        row.appendChild(
+
+            createBall(
+
+                num,
+
+                data.colors[index],
+
+                type
+
+            )
+
+        );
+
+
+    });
+
+
+
+    box.appendChild(row);
+
+
+}
+
+
+
+
+
+
 function start(){
 
 
-    let timer = setInterval(()=>{
+    clearInterval(timer);
 
 
-        let front = createNumber(35,5);
-        let back = createNumber(12,2);
+
+    timer=setInterval(()=>{
 
 
-        document.getElementById("front").innerHTML =
-            front.join(" ");
-
-
-        document.getElementById("back").innerHTML =
-            back.join(" ");
+        show(createLottery());
 
 
     },100);
+
+
 
 
 
@@ -119,19 +717,7 @@ function start(){
         clearInterval(timer);
 
 
-        let front = createNumber(35,5);
-        let back = createNumber(12,2);
-
-
-
-        document.getElementById("front").innerHTML =
-            front.join(" ");
-
-
-
-        document.getElementById("back").innerHTML =
-            back.join(" ");
-
+        show(createLottery());
 
 
     },3000);
@@ -140,8 +726,10 @@ function start(){
 }
 
 
+
 </script>
 
 
 </body>
+
 </html>
