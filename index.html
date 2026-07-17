@@ -62,8 +62,6 @@ button{
 
 
 
-/* 总容器 */
-
 #result{
 
     margin-top:40px;
@@ -72,59 +70,45 @@ button{
 
 
 
-
 .row{
-
 
     display:flex;
 
-
     justify-content:center;
-
 
     align-items:center;
 
-
     flex-wrap:nowrap;
-
 
 }
 
 
 
 
-.ball{
 
+.ball{
 
     width:58px;
 
-
     height:58px;
-
 
     margin:5px;
 
-
     border-radius:50%;
-
 
     display:flex;
 
-
     justify-content:center;
-
 
     align-items:center;
 
-
     color:white;
-
-
-    font-weight:bold;
-
 
     font-size:22px;
 
+    font-weight:bold;
+
+    flex-shrink:0;
 
 }
 
@@ -137,13 +121,11 @@ button{
 }
 
 
-
 .blue{
 
     background:#3498db;
 
 }
-
 
 
 .green{
@@ -154,25 +136,18 @@ button{
 
 
 
-/* 快乐8专用 */
+
+/* 快乐8 */
 
 .k8-container{
 
-
-    width:100%;
-
-
     display:flex;
-
 
     flex-direction:column;
 
-
     justify-content:center;
 
-
     align-items:center;
-
 
 }
 
@@ -180,66 +155,74 @@ button{
 
 .k8-row{
 
-
     display:flex;
-
 
     justify-content:center;
 
-
     align-items:center;
-
 
 }
 
 
 
 
+
+
+/* 手机适配 */
 
 @media(max-width:600px){
 
 
+    h1{
 
-h1{
+        font-size:28px;
 
-    font-size:28px;
-
-}
-
-
-
-.ball{
-
-
-    width:38px;
-
-
-    height:38px;
-
-
-    margin:3px;
-
-
-    font-size:15px;
-
-
-}
+    }
 
 
 
-select{
-
-    font-size:16px;
-
-}
+    .ball{
 
 
+        width:38px;
 
-button{
+        height:38px;
 
-    font-size:18px;
+        margin:3px;
 
-}
+        font-size:15px;
+
+    }
+
+
+
+    select{
+
+        font-size:16px;
+
+    }
+
+
+
+    button{
+
+        font-size:18px;
+
+    }
+
+
+
+
+    /* 手机快乐8 */
+
+    .k8-row{
+
+
+        width:230px;
+
+        flex-wrap:wrap;
+
+    }
 
 
 
@@ -251,6 +234,7 @@ button{
 
 
 </head>
+
 
 
 <body>
@@ -288,7 +272,9 @@ button{
 </select>
 
 
+
 <div id="result"></div>
+
 
 
 <button onclick="start()">
@@ -305,12 +291,14 @@ let timer;
 
 
 
-// 不重复号码
+
+// 不重复随机
 
 function randomNo(max,count){
 
 
     let arr=[];
+
 
 
     while(arr.length<count){
@@ -319,10 +307,12 @@ function randomNo(max,count){
         let num=Math.floor(Math.random()*max)+1;
 
 
+
         if(!arr.includes(num)){
 
 
             arr.push(num);
+
 
         }
 
@@ -330,17 +320,22 @@ function randomNo(max,count){
     }
 
 
+
     arr.sort((a,b)=>a-b);
 
 
+
     return arr;
+
 
 }
 
 
 
 
-//3D
+
+
+// 3D
 
 function create3D(){
 
@@ -361,12 +356,15 @@ function create3D(){
 
 
 
+
+
 //七星彩
 
 function createQXC(){
 
 
     let arr=[];
+
 
 
     for(let i=0;i<6;i++){
@@ -381,14 +379,22 @@ function createQXC(){
 
 
 
+    //特别号码 0-14
+
     arr.push(
+
         Math.floor(Math.random()*15)
+
     );
+
 
 
     return arr;
 
+
 }
+
+
 
 
 
@@ -400,6 +406,8 @@ function createLottery(){
 
 
 
+
+    //大乐透
 
     if(type==="dlt"){
 
@@ -414,6 +422,7 @@ function createLottery(){
                 ...randomNo(12,2)
 
             ],
+
 
 
             colors:[
@@ -434,13 +443,17 @@ function createLottery(){
 
             ]
 
+
         };
+
 
     }
 
 
 
 
+
+    //3D
 
     if(type==="3d"){
 
@@ -471,6 +484,8 @@ function createLottery(){
 
 
 
+    //快乐8
+
     if(type==="k8"){
 
 
@@ -490,6 +505,9 @@ function createLottery(){
 
 
 
+
+
+    //七星彩
 
     if(type==="qxc"){
 
@@ -525,7 +543,6 @@ function createLottery(){
     }
 
 
-
 }
 
 
@@ -540,7 +557,8 @@ function createBall(num,color,type){
     let ball=document.createElement("div");
 
 
-    ball.className="ball "+color;
+    ball.className=
+    "ball "+color;
 
 
 
@@ -571,6 +589,7 @@ function createBall(num,color,type){
 
 
 
+
 function show(data){
 
 
@@ -585,7 +604,9 @@ function show(data){
 
 
 
-    //快乐8特殊处理
+
+
+    //快乐8
 
     if(type==="k8"){
 
@@ -597,7 +618,22 @@ function show(data){
 
 
 
-        for(let i=0;i<2;i++){
+        // 自动判断电脑还是手机
+
+        let countPerRow =
+        window.innerWidth <=600 ? 5 : 10;
+
+
+
+        let rows =
+        20 / countPerRow;
+
+
+
+
+
+        for(let i=0;i<rows;i++){
+
 
 
             let row=document.createElement("div");
@@ -607,10 +643,11 @@ function show(data){
 
 
 
-            for(let j=0;j<10;j++){
+            for(let j=0;j<countPerRow;j++){
 
 
-                let index=i*10+j;
+                let index=i*countPerRow+j;
+
 
 
                 row.appendChild(
@@ -631,6 +668,7 @@ function show(data){
             }
 
 
+
             container.appendChild(row);
 
 
@@ -639,6 +677,7 @@ function show(data){
 
 
         box.appendChild(container);
+
 
 
         return;
@@ -651,7 +690,8 @@ function show(data){
 
 
 
-    //其他全部一排
+
+    //其他彩票一排
 
     let row=document.createElement("div");
 
@@ -685,7 +725,10 @@ function show(data){
     box.appendChild(row);
 
 
+
 }
+
+
 
 
 
@@ -717,10 +760,13 @@ function start(){
         clearInterval(timer);
 
 
+
         show(createLottery());
 
 
+
     },3000);
+
 
 
 }
