@@ -80,6 +80,22 @@ button:hover{
     background: radial-gradient(circle at 30% 30%,#74b9ff,#0984e3);
 }
 
+.ball.green {
+    background: radial-gradient(circle at 30% 30%, #2ecc71, #1e8449);
+}
+
+.ball.orange {
+    background: radial-gradient(circle at 30% 30%, #ff9f43, #c0392b);
+}
+
+.ball.pink {
+    background: radial-gradient(circle at 30% 30%, #fd79a8, #c44569);
+}
+
+.ball.purple {
+    background: radial-gradient(circle at 30% 30%, #a29bfe, #574b90);
+}
+
 .ball.stopped{
     animation: popIn 0.3s ease-out;
 }

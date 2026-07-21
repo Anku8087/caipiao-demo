@@ -72,12 +72,24 @@ window.addEventListener('DOMContentLoaded', () => {
     // 工具函数：生成 3D 的最终号码
     function generate3DConfigs() {
         return Array.from({ length: 3 }, () => {
-            const digit = Math.floor(Math.random() * 10);
+            const configs = Math.floor(Math.random() * 10);
             return {
-                value: String(digit),
+                value: String(configs),
                 color: 'red',
                 min: 0,
                 max: 9
+            };
+        });
+    }
+
+    function generate5DConfigs(){
+        return Array.from({length:5},()=>{
+            const configs=Math.floor(Math.random()*10);
+            return {
+                value:String(configs),
+                color:'red',
+                min:0,
+                max:9
             };
         });
     }
@@ -108,15 +120,72 @@ window.addEventListener('DOMContentLoaded', () => {
         return [...frontConfigs, ...backConfigs];
     }
 
+    function generateDoubleColorBallConfigs(){
+        const frontPool = Array.from({ length: 33 }, (_, i) => i + 1);
+        const backPool = Array.from({ length: 16 }, (_, i) => i + 1);
+
+        const fronts = pickUnique(frontPool, 6).sort((a, b) => a - b);
+        const backs = pickUnique(backPool, 1).sort((a, b) => a - b);
+
+        const frontConfigs = fronts.map(num => ({
+            value: String(num).padStart(2, '0'),
+            color: 'blue',
+            min: 1,
+            max: 33
+        }));
+
+        // 后区蓝球配置
+        const backConfigs = backs.map(num => ({
+            value: String(num).padStart(2, '0'),
+            color: 'orange',
+            min: 1,
+            max: 16
+        }));
+
+        // 合并两个数组返回
+        return [...frontConfigs, ...backConfigs];
+    }
+
     function generateK8Configs(count) {
         const pool = Array.from({ length: 80 }, (_, i) => i + 1);
         const selected = pickUnique(pool, count).sort((a, b) => a - b);
 
         return selected.map(num => ({
             value: String(num).padStart(2, '0'),
-            color: 'red',
+            color: 'pink',
             min: 1,
             max: 80
+        }));
+    }
+
+    function generateQiXingCaiConfigs(){
+        const fronts=Array.from({length:6},()=>Math.floor(Math.random()*10))
+            .map(num=>({
+            value:String(num),
+            color:'purple',
+            min:0,
+            max:9
+        }));
+            
+        const backs={
+            value:String(Math.floor(Math.random()*15)),
+            color:'green',
+            min:0,
+            max:14
+        }
+
+        return [...fronts,backs];
+    }
+
+    function generateQiLeCaiConfigs(){
+        const pool= Array.from({length:30},(_,i)=>i+1);
+        const selected = pickUnique(pool, 7).sort((a, b) => a - b);
+
+        return selected.map(num=>({
+            value:String(num).padStart(2,'0'),
+            color:'orange',
+            min:1,
+            max:30
         }));
     }
 
@@ -224,13 +293,35 @@ window.addEventListener('DOMContentLoaded', () => {
 
         let configs = [];
 
-        if (gameType === '3d') {
-            configs = generate3DConfigs();
-        } else if (gameType === 'lotto') {
-            configs = generateLottoConfigs();
-        }
-        // 后续其他玩法在这里加 else if
+        switch (gameType) {
+            case '3d':
+                configs=generate3DConfigs();
+                break;
 
+            case '5d':
+                configs=generate5DConfigs();
+                break;
+
+            case'lotto':
+                configs=generateLottoConfigs();
+                break;
+
+            case 'double-color-ball':
+                configs=generateDoubleColorBallConfigs();
+                break;
+
+            case 'qixingcai':
+                configs=generateQiXingCaiConfigs();
+                break;
+
+            case 'qilecai':
+                configs=generateQiLeCaiConfigs();
+                break;
+
+            default:showToast('未找到该玩法！');
+                isRolling=false;
+                return;
+        }
         doRoll(configs);
     });
 
