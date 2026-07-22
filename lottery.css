@@ -113,10 +113,9 @@ button:hover{
         font-size: 18px;
     }
     .container{
-        padding: 20px;
+        padding: 15px;
     }
     .result-area{
-        flex-wrap: nowrap;
         gap:8px;
     }
 }
