@@ -103,9 +103,8 @@ button:hover{
 .ball.stopped{
     animation: popIn 0.3s ease-out;
 }
-button, input, select, textarea {
+button, input, select {
     font-family: inherit;
-    font-size: inherit;
 }
 
 @keyframes popIn {
