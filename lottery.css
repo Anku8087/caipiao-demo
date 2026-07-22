@@ -1,11 +1,15 @@
 body{
-    font-family: Arial, sans-serif;
+    font-family: Arial, Helvetica, "Microsoft YaHei", "苹方", "PingFang SC", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif !important;
     background-color: #f4f4f4;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 .container{
@@ -98,6 +102,10 @@ button:hover{
 
 .ball.stopped{
     animation: popIn 0.3s ease-out;
+}
+button, input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
 }
 
 @keyframes popIn {
