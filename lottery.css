@@ -116,8 +116,11 @@ button:hover{
         padding: 20px;
     }
     .result-area{
+        display: flex;
+        justify-content: center;
+        align-items: center;
         flex-wrap: nowrap;
-        gap:6px;
+        gap:8px;
     }
 }
 
